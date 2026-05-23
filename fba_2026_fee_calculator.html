@@ -331,7 +331,7 @@
         <form id="feeForm" class="form-grid">
           <div>
             <label for="price">商品售价 USD</label>
-            <input id="price" type="number" step="0.01" min="0" placeholder="例如 15.99" required />
+            <input id="price" type="number" step="0.01" min="0" placeholder="不填则默认 10-50 美元档位" />
           </div>
           <div>
             <label for="weightKg">产品实重 kg</label>
@@ -585,7 +585,9 @@
     document.getElementById("feeForm").addEventListener("submit", function (event) {
       event.preventDefault();
       try {
-        const price = getNumber("price");
+        const priceInput = document.getElementById("price").value;
+        const price = priceInput === "" ? NaN : getNumber("price");
+        const priceTier = isNaN(price) ? "mid" : getPriceTier(price);
         const weightKg = getNumber("weightKg");
         const dims = sortDimsCm(getNumber("longest"), getNumber("middle"), getNumber("shortest"));
         const [lengthCm, widthCm, heightCm] = dims;
@@ -595,7 +597,6 @@
         const actualLb = weightKg * LB_PER_KG;
         const dimLb = dimWeightLb(L, M, S);
         const preliminaryShipLb = Math.max(actualLb, dimLb);
-        const priceTier = getPriceTier(price);
         const manualTier = document.getElementById("tierMode").value;
         const autoTier = determineTier({ L, M, S, actualLb, dimLb, shipLb: preliminaryShipLb });
         const tier = manualTier === "auto" ? autoTier : manualTier;
