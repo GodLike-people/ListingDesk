@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 US FBA 配送费计算器</title>
+  <style>
+    :root {
+      --bg1: #eef4ff;
+      --bg2: #f8fbff;
+      --card: rgba(255, 255, 255, 0.92);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #dbe3ef;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --good: #0f766e;
+      --warn: #b45309;
+      --danger: #b91c1c;
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top left, #dbeafe 0, transparent 34%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+
+    .page {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 32px auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 4vw, 40px);
+      letter-spacing: -0.04em;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 780px;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #155e75;
+      border: 1px solid #a5f3fc;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(219, 227, 239, 0.9);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 22px;
+    }
+
+    .card h2 {
+      margin: 0 0 18px;
+      font-size: 20px;
+      color: #0f172a;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: #374151;
+      margin: 0 0 6px;
+      font-weight: 700;
+    }
+
+    input, select {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 15px;
+      background: #fff;
+      color: #111827;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid #dbe3ef;
+      border-radius: 14px;
+      background: #f8fafc;
+    }
+
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+    }
+
+    .check-row span {
+      color: #374151;
+      font-weight: 700;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      height: 46px;
+      padding: 0 18px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 15px;
+      transition: 0.2s ease;
+    }
+
+    .primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      flex: 1;
+    }
+
+    .secondary {
+      color: #1f2937;
+      background: #e5e7eb;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .result-box {
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .empty {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+      border: 1px dashed #cbd5e1;
+      border-radius: 18px;
+      background: #f8fafc;
+    }
+
+    .fee-main {
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #eff6ff, #ecfeff);
+      border: 1px solid #bfdbfe;
+    }
+
+    .fee-title {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .fee-value {
+      font-size: clamp(34px, 5vw, 52px);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+
+    .fee-sub {
+      margin-top: 8px;
+      color: #334155;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 13px;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .metric strong {
+      font-size: 17px;
+      color: #111827;
+    }
+
+    .note {
+      padding: 13px 14px;
+      border-radius: 15px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .ok {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #047857;
+    }
+
+    .danger {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    details {
+      margin-top: 18px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: #1d4ed8;
+    }
+
+    .small-text {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .header, .grid { grid-template-columns: 1fr; display: grid; }
+      .badge { width: fit-content; }
+      .form-grid, .metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="header">
+      <div>
+        <h1 class="title">2026 US FBA 配送费计算器</h1>
+        <p class="subtitle">适用于美国站 FBA 非旺季、非服装类商品。输入产品价格、包装后尺寸和实重，自动判断尺寸分段并计算 2026 年 1 月 15 日起的配送费。可选择加入 3.5% 燃料与物流相关附加费。</p>
+      </div>
+      <div class="badge">2026.01.15 起</div>
+    </div>
+
+    <section class="grid">
+      <div class="card">
+        <h2>输入参数</h2>
+        <form id="feeForm" class="form-grid">
+          <div>
+            <label for="price">商品售价 USD</label>
+            <input id="price" type="number" step="0.01" min="0" placeholder="例如 15.99" required />
+          </div>
+          <div>
+            <label for="weightKg">产品实重 kg</label>
+            <input id="weightKg" type="number" step="0.001" min="0" placeholder="例如 0.42" required />
+          </div>
+          <div>
+            <label for="longest">最长边 cm</label>
+            <input id="longest" type="number" step="0.01" min="0" placeholder="例如 25" required />
+          </div>
+          <div>
+            <label for="middle">次长边 cm</label>
+            <input id="middle" type="number" step="0.01" min="0" placeholder="例如 18" required />
+          </div>
+          <div>
+            <label for="shortest">最短边 cm</label>
+            <input id="shortest" type="number" step="0.01" min="0" placeholder="例如 4" required />
+          </div>
+          <div>
+            <label for="tierMode">尺寸分段</label>
+            <select id="tierMode">
+              <option value="auto">自动判断</option>
+              <option value="smallStandard">小号标准尺寸</option>
+              <option value="largeStandard">大号标准尺寸</option>
+              <option value="smallBulky">小号大件</option>
+              <option value="largeBulky">大号大件</option>
+              <option value="extraLarge0to50">超大件 0 至 50 磅</option>
+              <option value="extraLarge50to70">超大件 50 至 70 磅</option>
+              <option value="extraLarge70to150">超大件 70 至 150 磅</option>
+              <option value="extraLarge150plus">超大件 150 磅以上</option>
+            </select>
+          </div>
+          <label class="check-row full" for="surcharge">
+            <input id="surcharge" type="checkbox" />
+            <span>加入 3.5% 燃料与物流相关附加费</span>
+          </label>
+          <div class="actions full">
+            <button class="primary" type="submit">计算 FBA 配送费</button>
+            <button class="secondary" type="button" id="resetBtn">清空</button>
+          </div>
+        </form>
+        <p class="small-text">尺寸可以不用手动排序，程序会自动把三边按最长边、次长边、最短边处理。FBA 最终计费以后台 Fee Preview 和亚马逊实际测量为准。</p>
+      </div>
+
+      <div class="card result-box" id="result">
+        <div class="empty">输入参数后点击计算，这里会显示费用、尺寸分段、体积重、计费重和价格档位。</div>
+      </div>
+    </section>
+
+    <div class="card" style="margin-top:18px;">
+      <h2>内置规则说明</h2>
+      <table>
+        <thead>
+          <tr><th>分段</th><th>判断口径</th><th>计费重量口径</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>小号标准尺寸</td><td>最长边 ≤ 15 in，次长边 ≤ 12 in，最短边 ≤ 0.75 in，实重 ≤ 16 oz</td><td>按实重匹配盎司档</td></tr>
+          <tr><td>大号标准尺寸</td><td>最长边 ≤ 18 in，次长边 ≤ 14 in，最短边 ≤ 8 in，实重 ≤ 20 lb</td><td>实重和体积重取较大值</td></tr>
+          <tr><td>小号大件</td><td>最长边 ≤ 37 in，次长边 ≤ 28 in，最短边 ≤ 20 in，长加围 ≤ 130 in，计费重 ≤ 50 lb</td><td>实重和体积重取较大值</td></tr>
+          <tr><td>大号大件</td><td>最长边 ≤ 59 in，次长边 ≤ 33 in，最短边 ≤ 33 in，长加围 ≤ 130 in，计费重 ≤ 50 lb</td><td>实重和体积重取较大值</td></tr>
+          <tr><td>超大件</td><td>超出大号大件或计费重大于 50 lb，按 0 至 50、50 至 70、70 至 150、150 磅以上分段</td><td>150 磅以上按实重，其余取实重和体积重较大值</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const LB_PER_KG = 2.20462262185;
+    const CM_PER_IN = 2.54;
+
+    const tierLabels = {
+      smallStandard: "小号标准尺寸",
+      largeStandard: "大号标准尺寸",
+      smallBulky: "小号大件",
+      largeBulky: "大号大件",
+      extraLarge0to50: "超大件 0 至 50 磅",
+      extraLarge50to70: "超大件 50 至 70 磅",
+      extraLarge70to150: "超大件 70 至 150 磅",
+      extraLarge150plus: "超大件 150 磅以上"
+    };
+
+    const priceTierLabels = {
+      low: "< $10",
+      mid: "$10 至 $50",
+      high: "> $50"
+    };
+
+    const smallStandardRates = [
+      { max: 2 / 16, fee: { low: 2.43, mid: 3.32, high: 3.58 }, label: "不超过 2 盎司" },
+      { max: 4 / 16, fee: { low: 2.49, mid: 3.42, high: 3.68 }, label: "2 至 4 盎司" },
+      { max: 6 / 16, fee: { low: 2.56, mid: 3.45, high: 3.71 }, label: "4 至 6 盎司" },
+      { max: 8 / 16, fee: { low: 2.66, mid: 3.54, high: 3.80 }, label: "6 至 8 盎司" },
+      { max: 10 / 16, fee: { low: 2.77, mid: 3.68, high: 3.94 }, label: "8 至 10 盎司" },
+      { max: 12 / 16, fee: { low: 2.82, mid: 3.78, high: 4.04 }, label: "10 至 12 盎司" },
+      { max: 14 / 16, fee: { low: 2.92, mid: 3.91, high: 4.17 }, label: "12 至 14 盎司" },
+      { max: 16 / 16, fee: { low: 2.95, mid: 3.96, high: 4.22 }, label: "14 至 16 盎司" }
+    ];
+
+    const largeStandardRates = [
+      { max: 4 / 16, fee: { low: 2.91, mid: 3.73, high: 3.99 }, label: "不超过 4 盎司" },
+      { max: 8 / 16, fee: { low: 3.13, mid: 3.95, high: 4.21 }, label: "4 至 8 盎司" },
+      { max: 12 / 16, fee: { low: 3.38, mid: 4.20, high: 4.46 }, label: "8 至 12 盎司" },
+      { max: 16 / 16, fee: { low: 3.78, mid: 4.60, high: 4.86 }, label: "12 至 16 盎司" },
+      { max: 1.25, fee: { low: 4.22, mid: 5.04, high: 5.30 }, label: "1 至 1.25 磅" },
+      { max: 1.5, fee: { low: 4.60, mid: 5.42, high: 5.68 }, label: "1.25 至 1.5 磅" },
+      { max: 1.75, fee: { low: 4.75, mid: 5.57, high: 5.83 }, label: "1.5 至 1.75 磅" },
+      { max: 2, fee: { low: 5.00, mid: 5.82, high: 6.08 }, label: "1.75 至 2 磅" },
+      { max: 2.25, fee: { low: 5.10, mid: 5.92, high: 6.18 }, label: "2 至 2.25 磅" },
+      { max: 2.5, fee: { low: 5.28, mid: 6.10, high: 6.36 }, label: "2.25 至 2.5 磅" },
+      { max: 2.75, fee: { low: 5.44, mid: 6.26, high: 6.52 }, label: "2.5 至 2.75 磅" },
+      { max: 3, fee: { low: 5.85, mid: 6.67, high: 6.93 }, label: "2.75 至 3 磅" }
+    ];
+
+    function money(value) {
+      return `$${value.toFixed(2)}`;
+    }
+
+    function getNumber(id) {
+      const value = Number(document.getElementById(id).value);
+      if (!Number.isFinite(value) || value < 0) throw new Error("请输入有效的正数");
+      return value;
+    }
+
+    function getPriceTier(price) {
+      if (price < 10) return "low";
+      if (price <= 50) return "mid";
+      return "high";
+    }
+
+    function sortDimsCm(a, b, c) {
+      return [a, b, c].sort((x, y) => y - x);
+    }
+
+    function dimWeightLb(lengthIn, widthIn, heightIn) {
+      const billableWidth = Math.max(widthIn, 2);
+      const billableHeight = Math.max(heightIn, 2);
+      return (lengthIn * billableWidth * billableHeight) / 139;
+    }
+
+    function lengthPlusGirth(lengthIn, widthIn, heightIn) {
+      return lengthIn + 2 * (widthIn + heightIn);
+    }
+
+    function determineTier(input) {
+      const { L, M, S, actualLb, dimLb, shipLb } = input;
+      const lpg = lengthPlusGirth(L, M, S);
+
+      if (actualLb <= 1 && L <= 15 && M <= 12 && S <= 0.75) return "smallStandard";
+      if (actualLb <= 20 && L <= 18 && M <= 14 && S <= 8) return "largeStandard";
+      if (shipLb <= 50 && L <= 37 && M <= 28 && S <= 20 && lpg <= 130) return "smallBulky";
+      if (shipLb <= 50 && L <= 59 && M <= 33 && S <= 33 && lpg <= 130) return "largeBulky";
+      if (actualLb > 150) return "extraLarge150plus";
+      if (shipLb > 150) return "extraLarge150plus";
+      if (shipLb > 70) return "extraLarge70to150";
+      if (shipLb > 50) return "extraLarge50to70";
+      return "extraLarge0to50";
+    }
+
+    function feeForTier(tier, priceTier, actualLb, dimLb) {
+      const shipLb = tier === "smallStandard" || tier === "extraLarge150plus"
+        ? actualLb
+        : Math.max(actualLb, dimLb);
+
+      if (tier === "smallStandard") {
+        const row = smallStandardRates.find(r => shipLb <= r.max + 1e-9);
+        if (!row) throw new Error("小号标准尺寸的实重不能超过 16 盎司");
+        return { baseFee: row.fee[priceTier], shipLb, weightBand: row.label, formula: "固定档位" };
+      }
+
+      if (tier === "largeStandard") {
+        const row = largeStandardRates.find(r => shipLb <= r.max + 1e-9);
+        if (row) return { baseFee: row.fee[priceTier], shipLb, weightBand: row.label, formula: "固定档位" };
+        if (shipLb <= 20) {
+          const base = { low: 6.15, mid: 6.97, high: 7.23 }[priceTier];
+          const extra = Math.max(0, Math.ceil((shipLb - 3) / 0.25)) * 0.08;
+          return { baseFee: base + extra, shipLb, weightBand: "3 至 20 磅", formula: `${money(base)} + 超出 3 磅部分每 4 盎司 $0.08` };
+        }
+        throw new Error("大号标准尺寸的计费重不能超过 20 磅");
+      }
+
+      if (tier === "smallBulky") {
+        const base = { low: 6.78, mid: 7.55, high: 7.55 }[priceTier];
+        const extra = Math.max(0, Math.ceil(shipLb - 1)) * 0.38;
+        return { baseFee: base + extra, shipLb, weightBand: "0 至 50 磅", formula: `${money(base)} + 超出首磅部分每磅 $0.38` };
+      }
+
+      if (tier === "largeBulky") {
+        const base = { low: 8.58, mid: 9.35, high: 9.35 }[priceTier];
+        const extra = Math.max(0, Math.ceil(shipLb - 1)) * 0.38;
+        return { baseFee: base + extra, shipLb, weightBand: "0 至 50 磅", formula: `${money(base)} + 超出首磅部分每磅 $0.38` };
+      }
+
+      if (tier === "extraLarge0to50") {
+        const base = { low: 25.56, mid: 26.33, high: 26.33 }[priceTier];
+        const extra = Math.max(0, Math.ceil(shipLb - 1)) * 0.38;
+        return { baseFee: base + extra, shipLb, weightBand: "0 至 50 磅", formula: `${money(base)} + 超出首磅部分每磅 $0.38` };
+      }
+
+      if (tier === "extraLarge50to70") {
+        const base = { low: 36.55, mid: 37.32, high: 37.32 }[priceTier];
+        const extra = Math.max(0, Math.ceil(shipLb - 51)) * 0.75;
+        return { baseFee: base + extra, shipLb, weightBand: "50 至 70 磅", formula: `${money(base)} + 超出首重 51 磅部分每磅 $0.75` };
+      }
+
+      if (tier === "extraLarge70to150") {
+        const base = { low: 50.55, mid: 51.32, high: 51.32 }[priceTier];
+        const extra = Math.max(0, Math.ceil(shipLb - 71)) * 0.75;
+        return { baseFee: base + extra, shipLb, weightBand: "70 至 150 磅", formula: `${money(base)} + 超出首重 71 磅部分每磅 $0.75` };
+      }
+
+      if (tier === "extraLarge150plus") {
+        const base = { low: 194.18, mid: 194.95, high: 194.95 }[priceTier];
+        const extra = Math.max(0, Math.ceil(actualLb - 151)) * 0.19;
+        return { baseFee: base + extra, shipLb: actualLb, weightBand: "150 磅以上", formula: `${money(base)} + 超出首重 151 磅部分每磅 $0.19` };
+      }
+
+      throw new Error("无法匹配费用分段");
+    }
+
+    function renderResult(data) {
+      const result = document.getElementById("result");
+      const surchargeText = data.surcharge > 0 ? `<div class="metric"><span>燃料物流附加费</span><strong>${money(data.surcharge)}</strong></div>` : "";
+      const noteClass = data.warning ? "note danger" : "note ok";
+      const noteText = data.warning || "已匹配 2026 年 1 月 15 日起的非旺季非服装类 FBA 配送费。";
+
+      result.innerHTML = `
+        <div class="fee-main">
+          <div class="fee-title">预估 FBA 配送费</div>
+          <div class="fee-value">${money(data.totalFee)}</div>
+          <div class="fee-sub">基础配送费 ${money(data.baseFee)}${data.surcharge > 0 ? `，附加费 ${money(data.surcharge)}` : ""}</div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><span>尺寸分段</span><strong>${tierLabels[data.tier]}</strong></div>
+          <div class="metric"><span>价格档位</span><strong>${priceTierLabels[data.priceTier]}</strong></div>
+          <div class="metric"><span>实重</span><strong>${data.actualLb.toFixed(3)} lb</strong></div>
+          <div class="metric"><span>体积重</span><strong>${data.dimLb.toFixed(3)} lb</strong></div>
+          <div class="metric"><span>计费重</span><strong>${data.shipLb.toFixed(3)} lb</strong></div>
+          <div class="metric"><span>重量档</span><strong>${data.weightBand}</strong></div>
+          ${surchargeText}
+        </div>
+        <div class="${noteClass}">${noteText}</div>
+        <div class="note">计费公式：${data.formula}</div>
+        <table>
+          <tbody>
+            <tr><th>最长边</th><td>${data.L.toFixed(2)} in</td><th>次长边</th><td>${data.M.toFixed(2)} in</td></tr>
+            <tr><th>最短边</th><td>${data.S.toFixed(2)} in</td><th>长加围</th><td>${data.lengthGirth.toFixed(2)} in</td></tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    document.getElementById("feeForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      try {
+        const price = getNumber("price");
+        const weightKg = getNumber("weightKg");
+        const dims = sortDimsCm(getNumber("longest"), getNumber("middle"), getNumber("shortest"));
+        const [lengthCm, widthCm, heightCm] = dims;
+        const L = lengthCm / CM_PER_IN;
+        const M = widthCm / CM_PER_IN;
+        const S = heightCm / CM_PER_IN;
+        const actualLb = weightKg * LB_PER_KG;
+        const dimLb = dimWeightLb(L, M, S);
+        const preliminaryShipLb = Math.max(actualLb, dimLb);
+        const priceTier = getPriceTier(price);
+        const manualTier = document.getElementById("tierMode").value;
+        const autoTier = determineTier({ L, M, S, actualLb, dimLb, shipLb: preliminaryShipLb });
+        const tier = manualTier === "auto" ? autoTier : manualTier;
+        const feeData = feeForTier(tier, priceTier, actualLb, dimLb);
+        const addSurcharge = document.getElementById("surcharge").checked;
+        const surcharge = addSurcharge ? feeData.baseFee * 0.035 : 0;
+        const totalFee = feeData.baseFee + surcharge;
+
+        let warning = "";
+        if (manualTier !== "auto" && manualTier !== autoTier) {
+          warning = `当前手动选择为 ${tierLabels[manualTier]}，自动判断结果为 ${tierLabels[autoTier]}。建议同时用后台 Fee Preview 核对。`;
+        }
+
+        renderResult({
+          ...feeData,
+          tier,
+          priceTier,
+          actualLb,
+          dimLb,
+          baseFee: feeData.baseFee,
+          surcharge,
+          totalFee,
+          L,
+          M,
+          S,
+          lengthGirth: lengthPlusGirth(L, M, S),
+          warning
+        });
+      } catch (error) {
+        document.getElementById("result").innerHTML = `<div class="note danger">${error.message}</div>`;
+      }
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", function () {
+      document.getElementById("feeForm").reset();
+      document.getElementById("result").innerHTML = `<div class="empty">输入参数后点击计算，这里会显示费用、尺寸分段、体积重、计费重和价格档位。</div>`;
+    });
+  </script>
+</body>
+</html>
