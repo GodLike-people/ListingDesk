@@ -1,0 +1,4 @@
+interface:
+  display_name: "Amazon A+ Content"
+  short_description: "A+模块策划、文案和生图Prompt"
+  default_prompt: "Use $amazon-aplus-content to confirm the product with a product image, analyze competitor A+ content, plan a connected branded Amazon A+ storyline, write copy, and create desktop 1464 x 600 px plus mobile 600 x 450 px image-generation prompts."

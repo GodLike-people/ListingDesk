@@ -1,0 +1,4 @@
+interface:
+  display_name: "Amazon 7 Images"
+  short_description: "亚马逊7张主图方案和生图Prompt"
+  default_prompt: "Use $amazon-main-images to analyze competitor images, plan seven marketplace-specific Amazon product images, and write ready-to-use image-generation prompts."

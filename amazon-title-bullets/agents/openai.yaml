@@ -1,0 +1,4 @@
+interface:
+  display_name: "Amazon Title & Bullets"
+  short_description: "竞对关键词整理、标题五点和后台词"
+  default_prompt: "Use $amazon-title-bullets to classify competitor keywords, draft marketplace-specific Amazon titles, rewrite bullets with Chinese translations, and create backend Search Terms."
