@@ -1,0 +1,629 @@
+.page {
+  min-height: 100vh;
+  color: #1c1711;
+  background: #f6f3ea;
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  min-height: 72px;
+  padding: 0 32px;
+  border-bottom: 1px solid #eadfcd;
+  background: rgba(255, 250, 240, 0.9);
+  backdrop-filter: blur(14px);
+}
+
+.backLink,
+.brand,
+.exportButton,
+.marketSwitch button,
+.generateButton,
+.refreshButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.backLink {
+  min-height: 40px;
+  color: #6f6254;
+}
+
+.brand {
+  color: #17130d;
+  font-size: 18px;
+}
+
+.brand span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 2px solid #17130d;
+  border-radius: 8px;
+  background: #ffd84d;
+  box-shadow: 4px 4px 0 #17130d;
+}
+
+.exportButton,
+.refreshButton {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #eadfcd;
+  color: #17130d;
+  background: #fff;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: end;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 38px 24px 22px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 7px 11px;
+  border: 1px solid #f1d774;
+  border-radius: 999px;
+  color: #695417;
+  background: #fff3bf;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.hero h1 {
+  max-width: 780px;
+  margin: 0;
+  color: #17130d;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.hero p {
+  max-width: 760px;
+  margin: 16px 0 0;
+  color: #766b5f;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.marketSwitch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(110px, 1fr));
+  gap: 6px;
+  padding: 6px;
+  border: 2px solid #17130d;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 5px 5px 0 #17130d;
+}
+
+.marketSwitch button {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 0;
+  color: #766b5f;
+  background: transparent;
+}
+
+.marketSwitch .active {
+  color: #17130d;
+  background: #ffd84d;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+  gap: 18px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 24px 48px;
+  align-items: start;
+}
+
+.inputPanel,
+.outputPanel,
+.resultCard,
+.detailCard {
+  border: 2px solid #17130d;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 6px 6px 0 #17130d;
+}
+
+.inputPanel {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.outputPanel,
+.detailCard,
+.resultCard {
+  min-width: 0;
+}
+
+.panelTitle {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.panelTitle > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 8px;
+  color: #2368d2;
+  background: #dfeaff;
+}
+
+.panelTitle strong {
+  color: #17130d;
+}
+
+.panelTitle em {
+  color: #766b5f;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.formGrid label,
+.fullLabel {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.formGrid span,
+.fullLabel span {
+  color: #766b5f;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.formGrid input,
+.fullLabel input,
+.fullLabel textarea,
+.textarea,
+.textareaSmall {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #eadfcd;
+  border-radius: 8px;
+  color: #40372d;
+  background: #fff;
+  outline: none;
+}
+
+.formGrid input,
+.fullLabel input {
+  height: 40px;
+  padding: 0 10px;
+}
+
+.fullLabel textarea,
+.textarea {
+  min-height: 132px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.textareaSmall {
+  min-height: 82px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.uploadGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+
+.uploadBox {
+  display: grid;
+  min-width: 0;
+  min-height: 96px;
+  place-items: center;
+  padding: 10px;
+  border: 1px dashed #cdbfab;
+  border-radius: 8px;
+  color: #766b5f;
+  background: #fffaf0;
+  text-align: center;
+}
+
+.uploadBox input {
+  display: none;
+}
+
+.uploadBox strong {
+  display: block;
+  margin-top: 6px;
+  color: #17130d;
+  font-size: 13px;
+}
+
+.uploadBox span {
+  margin-top: 3px;
+  font-size: 12px;
+}
+
+.generateButton {
+  min-height: 52px;
+  border: 2px solid #17130d;
+  color: #17130d;
+  background: #ffd84d;
+  box-shadow: 4px 4px 0 #17130d;
+}
+
+.outputPanel {
+  display: grid;
+  gap: 14px;
+  max-width: 100%;
+  padding: 16px;
+}
+
+.outputHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.outputHeader h2 {
+  margin: 0;
+  color: #17130d;
+  font-size: 28px;
+}
+
+.strategyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  min-width: 0;
+}
+
+.resultCard,
+.detailCard {
+  padding: 16px;
+  box-shadow: 4px 4px 0 #17130d;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #2368d2;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  color: #17130d;
+  font-size: 18px;
+}
+
+.resultCard p {
+  margin: 8px 0 0;
+  color: #766b5f;
+  line-height: 1.65;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 14px;
+  min-width: 0;
+}
+
+.imageRail {
+  display: grid;
+  gap: 8px;
+}
+
+.imageButton,
+.selectedImageButton {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-height: 68px;
+  padding: 8px;
+  border: 1px solid #eadfcd;
+  border-radius: 8px;
+  text-align: left;
+  background: #fff;
+}
+
+.selectedImageButton {
+  border: 2px solid #17130d;
+  background: #fff3bf;
+}
+
+.imageButton span,
+.selectedImageButton span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 8px;
+  color: #2368d2;
+  background: #dfeaff;
+  font-weight: 900;
+}
+
+.imageButton strong,
+.selectedImageButton strong,
+.imageButton small,
+.selectedImageButton small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.imageButton strong,
+.selectedImageButton strong {
+  color: #17130d;
+}
+
+.imageButton small,
+.selectedImageButton small {
+  margin-top: 3px;
+  color: #766b5f;
+}
+
+.detailTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.detailTop h3 {
+  margin: 0;
+  color: #17130d;
+  font-size: 24px;
+}
+
+.detailTop > span {
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #146b4d;
+  background: #dff5e8;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.previewStage {
+  padding: 12px;
+  border: 1px solid #eadfcd;
+  border-radius: 8px;
+  background: #fffaf0;
+}
+
+.whitePreview,
+.infoPreview {
+  position: relative;
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #eadfcd;
+  border-radius: 8px;
+}
+
+.whitePreview {
+  background: #fff;
+}
+
+.infoPreview {
+  background:
+    radial-gradient(circle at 22% 22%, rgba(255, 216, 77, 0.32), transparent 25%),
+    linear-gradient(135deg, #f7fbff, #fff);
+}
+
+.infoPreview strong {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  max-width: 280px;
+  padding: 10px 12px;
+  border: 2px solid #17130d;
+  border-radius: 8px;
+  color: #17130d;
+  background: #ffd84d;
+  box-shadow: 4px 4px 0 #17130d;
+}
+
+.productMock {
+  position: relative;
+  width: 270px;
+  height: 180px;
+}
+
+.filterOne,
+.filterTwo {
+  position: absolute;
+  width: 104px;
+  height: 150px;
+  border: 12px solid #1f2937;
+  border-radius: 8px;
+  background: repeating-linear-gradient(90deg, #e8eef7 0 8px, #c7d2e2 8px 14px);
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.16);
+}
+
+.filterOne {
+  left: 42px;
+  top: 12px;
+  transform: rotate(-7deg);
+}
+
+.filterTwo {
+  right: 44px;
+  top: 12px;
+  transform: rotate(7deg);
+}
+
+.brush {
+  position: absolute;
+  right: 28px;
+  bottom: 10px;
+  width: 210px;
+  height: 24px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #111827 0 18%, #2368d2 18% 72%, #111827 72% 100%);
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.infoBlock {
+  padding: 12px;
+  border: 1px solid #eadfcd;
+  border-radius: 8px;
+  background: #fffaf0;
+}
+
+.infoBlock strong {
+  color: #17130d;
+}
+
+.infoBlock p {
+  margin: 6px 0 0;
+  color: #766b5f;
+  line-height: 1.55;
+}
+
+.promptBox {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #eadfcd;
+  border-radius: 8px;
+  background: #f7fbff;
+}
+
+.promptBox p {
+  margin: 0;
+  color: #40372d;
+  line-height: 1.7;
+}
+
+.sequenceTable {
+  display: grid;
+  gap: 8px;
+}
+
+.sequenceRow {
+  display: grid;
+  grid-template-columns: 42px 160px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: #fffaf0;
+}
+
+.sequenceRow span {
+  color: #2368d2;
+  font-weight: 900;
+}
+
+.sequenceRow strong {
+  color: #17130d;
+}
+
+.sequenceRow em {
+  overflow: hidden;
+  color: #766b5f;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1160px) {
+  .workspace,
+  .hero,
+  .board {
+    grid-template-columns: 1fr;
+  }
+
+  .marketSwitch {
+    justify-self: start;
+  }
+
+  .imageRail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .nav {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .hero,
+  .workspace {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .strategyGrid,
+  .detailGrid,
+  .formGrid,
+  .uploadGrid,
+  .imageRail {
+    grid-template-columns: 1fr;
+  }
+
+  .sequenceRow {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .sequenceRow em {
+    grid-column: 2;
+  }
+}

@@ -1,312 +1,329 @@
 "use client";
 
+import Link from "next/link";
+import styles from "./home.module.css";
 import {
-  Archive,
-  Box,
+  ArrowRight,
+  BadgeCheck,
   ChevronDown,
+  Clock3,
+  DollarSign,
   Download,
   FileImage,
+  Globe2,
   ImagePlus,
+  Languages,
   Layers3,
-  LayoutGrid,
-  ListChecks,
-  PanelRight,
-  Play,
-  Plus,
-  RefreshCcw,
-  Search,
-  Settings,
+  MessageSquareText,
+  MousePointer2,
+  PenLine,
   Sparkles,
-  Upload
+  Upload,
+  WandSparkles
 } from "lucide-react";
 
-const projects = [
-  { name: "VF3500 Filter Kit", market: "Amazon US", status: "主图规划", active: true },
-  { name: "Vitalumix Brush Roll", market: "Amazon DE", status: "A+ 草稿", active: false },
-  { name: "Pet Grooming Set", market: "Amazon UK", status: "素材整理", active: false }
+const samples = ["滤芯套装", "厨房小家电", "宠物工具"];
+
+const painPoints = [
+  {
+    icon: DollarSign,
+    title: "少花冤枉设计费",
+    text: "把主图、A+、卖点布局放进同一个流程里，先用 AI 快速出方向，再让设计师或运营做最后判断。",
+    imageClass: "sample-cost"
+  },
+  {
+    icon: Languages,
+    title: "多站点文案一起规划",
+    text: "围绕 Amazon US、DE、UK 等站点组织语言和视觉重点，避免不同市场反复重写。",
+    imageClass: "sample-language"
+  },
+  {
+    icon: Layers3,
+    title: "主图与 A+ 不再割裂",
+    text: "先确定 7 张主图的转化任务，再延展到 A+ 连续页面，让整套素材讲同一个产品故事。",
+    imageClass: "sample-system"
+  }
 ];
 
-const mainImages = [
-  { index: "01", title: "白底主图", type: "Main", tone: "Product only", status: "Ready" },
-  { index: "02", title: "核心卖点", type: "Infographic", tone: "Benefit", status: "Draft" },
-  { index: "03", title: "结构细节", type: "Proof", tone: "Technical", status: "Draft" },
-  { index: "04", title: "使用场景", type: "Lifestyle", tone: "Clean home", status: "Draft" },
-  { index: "05", title: "痛点解决", type: "Problem", tone: "Before/After", status: "Draft" },
-  { index: "06", title: "包装兼容", type: "Details", tone: "Fit guide", status: "Draft" },
-  { index: "07", title: "品牌收尾", type: "Trust", tone: "Care", status: "Draft" }
+const steps = [
+  {
+    kicker: "第一步",
+    title: "上传商品图并填写 Brief",
+    text: "放入产品图、Logo、竞品参考和基础参数，系统先整理商品身份、站点语言和视觉方向。",
+    icon: Upload
+  },
+  {
+    kicker: "第二步",
+    title: "生成主图与 A+ 方案",
+    text: "自动拆出白底主图、卖点图、结构图、场景图，以及 PC / Mobile A+ 模块提示词。",
+    icon: WandSparkles
+  },
+  {
+    kicker: "第三步",
+    title: "选择模型、编辑并导出",
+    text: "按图片选择 OpenAI、Gemini 或 Imagen，保留版本，最终导出主图、A+ 和 Prompt 文档。",
+    icon: Download
+  }
 ];
 
-const modules = [
-  { title: "Hero Promise", size: "1464 x 600 / 600 x 450", copy: "Clean replacement, confident fit" },
-  { title: "Feature Deep Dive", size: "1464 x 600 / 600 x 450", copy: "Structure, material, airflow path" },
-  { title: "Use Scenario", size: "1464 x 600 / 600 x 450", copy: "Daily cleanup and quick replacement" },
-  { title: "Package Detail", size: "1464 x 600 / 600 x 450", copy: "What buyers receive" },
-  { title: "Brand Closer", size: "1464 x 600 / 600 x 450", copy: "Consistent care rhythm" }
+const gallery = [
+  { title: "Image 01", label: "白底主图", className: "gallery-white" },
+  { title: "Image 02", label: "核心卖点", className: "gallery-blue" },
+  { title: "A+ 01", label: "品牌 Hero", className: "gallery-green" },
+  { title: "A+ 03", label: "结构拆解", className: "gallery-amber" }
 ];
 
-const assets = [
-  { label: "Product Photo", meta: "4 files", color: "asset-blue" },
-  { label: "Logo", meta: "1 file", color: "asset-teal" },
-  { label: "Competitors", meta: "8 files", color: "asset-amber" },
-  { label: "Brand Style", meta: "3 files", color: "asset-rose" }
+const stats = [
+  { value: "7", label: "主图任务位" },
+  { value: "5-7", label: "A+ 模块" },
+  { value: "3", label: "生图模型入口" },
+  { value: "1", label: "套图导出流程" }
 ];
-
-const versions = ["v03 selected", "v02", "v01"];
 
 export default function Home() {
   return (
-    <main className="studio-shell">
-      <aside className="sidebar">
-        <div className="brand-block">
-          <div className="brand-mark">
+    <main className={c("site-shell")}>
+      <header className={c("nav")}>
+        <a className={c("logo")} href="#">
+          <span>
             <Sparkles size={20} />
-          </div>
-          <div>
-            <h1>Amazon Image Studio</h1>
-            <p>ListingDesk internal</p>
-          </div>
-        </div>
-
-        <button className="primary-action">
-          <Plus size={18} />
-          新建项目
-        </button>
-
-        <label className="search-box">
-          <Search size={17} />
-          <input placeholder="搜索 SKU / 品牌" />
-        </label>
-
-        <nav className="project-list" aria-label="Projects">
-          {projects.map((project) => (
-            <button className={project.active ? "project-item active" : "project-item"} key={project.name}>
-              <span className="project-name">{project.name}</span>
-              <span className="project-meta">
-                {project.market} · {project.status}
-              </span>
-            </button>
-          ))}
+          </span>
+          ListingDesk Studio
+        </a>
+        <nav className={c("nav-links")} aria-label="Primary">
+          <a href="#tools">工具</a>
+          <Link href="/main-images">主图</Link>
+          <Link href="/aplus-content">A+</Link>
+          <Link href="/listing-copy">标题五点</Link>
+          <a href="#workflow">流程</a>
+          <a href="#examples">示例</a>
         </nav>
-
-        <div className="sidebar-footer">
-          <button>
-            <Settings size={17} />
-            模型配置
+        <div className={c("nav-actions")}>
+          <button className={c("language-button")}>
+            <Globe2 size={16} />
+            简体中文
+            <ChevronDown size={16} />
           </button>
-          <button>
-            <Archive size={17} />
-            导出记录
-          </button>
+          <button className={c("secondary-button")}>登录</button>
+          <Link className={c("primary-button")} href="/listing-copy">
+            开始创作
+            <ArrowRight size={17} />
+          </Link>
         </div>
-      </aside>
+      </header>
 
-      <section className="workspace">
-        <header className="topbar">
-          <div>
-            <p className="eyebrow">Amazon US · Replacement Filter Kit</p>
-            <h2>VF3500 Filter Kit</h2>
+      <section className={c("hero")}>
+        <div className={c("hero-copy")}>
+          <div className={c("tool-pill")}>
+            <WandSparkles size={16} />
+            Amazon 主图 + A+ 内容生成器
           </div>
-          <div className="topbar-actions">
-            <button className="ghost-button">
-              <Upload size={17} />
+          <h1>用 AI 快速搭建高转化的亚马逊主图和 A+ 页面</h1>
+          <p>
+            面向运营团队的一站式出图入口：上传商品图，填写 Brief，选择模型，生成主图方案、A+
+            模块和可编辑 Prompt。
+          </p>
+          <div className={c("hero-actions")}>
+            <Link className={c("hero-button")} href="/listing-copy">
+              <Sparkles size={18} />
+              生成标题五点
+            </Link>
+            <Link className={c("outline-button")} href="/main-images">
+              主图 7 张规划
+              <ArrowRight size={17} />
+            </Link>
+            <Link className={c("outline-button")} href="/aplus-content">
+              A+ 模块规划
+              <ArrowRight size={17} />
+            </Link>
+          </div>
+          <div className={c("trust-row")}>
+            <span>
+              <BadgeCheck size={16} />
+              支持 OpenAI / Gemini / Imagen
+            </span>
+            <span>
+              <Clock3 size={16} />
+              先做前端体验
+            </span>
+          </div>
+        </div>
+
+        <div className={c("hero-tool")} aria-label="Upload mockup">
+          <div className={c("preview-card")}>
+            <div className={c("preview-top")}>
+              <span>A+ Generator</span>
+              <strong>VF3500 Filter Kit</strong>
+            </div>
+            <div className={c("product-stage")}>
+              <span className={c("filter-card", "filter-left")} />
+              <span className={c("filter-card", "filter-right")} />
+              <span className={c("brush-stick")} />
+              <span className={c("callout", "callout-one")}>White main image</span>
+              <span className={c("callout", "callout-two")}>A+ desktop & mobile</span>
+            </div>
+          </div>
+
+          <div className={c("upload-card")}>
+            <div className={c("upload-icon")}>
+              <Upload size={28} />
+            </div>
+            <h2>选择图片</h2>
+            <p>或将商品图、Logo、竞品参考拖放到这里</p>
+            <button className={c("upload-button")}>
+              <FileImage size={18} />
               上传素材
             </button>
-            <button className="dark-button">
-              <Download size={17} />
-              导出套图
-            </button>
           </div>
-        </header>
 
-        <div className="content-grid">
-          <section className="brief-panel">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">Brief</p>
-                <h3>商品信息</h3>
-              </div>
-              <button className="icon-button" aria-label="Collapse brief">
-                <ChevronDown size={18} />
-              </button>
-            </div>
-
-            <div className="brief-fields">
-              <Field label="Marketplace" value="Amazon US" />
-              <Field label="Language" value="English" />
-              <Field label="Category" value="Vacuum accessory" />
-              <Field label="Package" value="2 filters + 1 brush" />
-              <Field label="Color" value="Blue / Black" />
-              <Field label="Material" value="Washable foam, pleated filter" />
-            </div>
-
-            <div className="asset-strip">
-              {assets.map((asset) => (
-                <button className="asset-tile" key={asset.label}>
-                  <span className={`asset-thumb ${asset.color}`}>
-                    <FileImage size={19} />
-                  </span>
-                  <span>
-                    <strong>{asset.label}</strong>
-                    <small>{asset.meta}</small>
-                  </span>
-                </button>
+          <div className={c("sample-strip")}>
+            <p>暂时没有图片？试试这些示例</p>
+            <div>
+              {samples.map((sample) => (
+                <button key={sample}>{sample}</button>
               ))}
             </div>
-          </section>
-
-          <section className="main-panel">
-            <div className="tabs">
-              <button className="tab active">
-                <LayoutGrid size={17} />
-                主图 7 张
-              </button>
-              <button className="tab">
-                <Layers3 size={17} />
-                A+ 模块
-              </button>
-              <button className="tab">
-                <ListChecks size={17} />
-                Prompt 文档
-              </button>
-            </div>
-
-            <div className="canvas-row">
-              <div className="preview-stage">
-                <div className="mock-image">
-                  <div className="product-visual">
-                    <span className="filter-shape one" />
-                    <span className="filter-shape two" />
-                    <span className="brush-shape" />
-                  </div>
-                  <div className="image-label">Image 01 · White Background Main Image</div>
-                </div>
-              </div>
-
-              <div className="generation-panel">
-                <div className="section-heading compact">
-                  <div>
-                    <p className="eyebrow">Generate</p>
-                    <h3>模型设置</h3>
-                  </div>
-                  <button className="icon-button" aria-label="More settings">
-                    <PanelRight size={18} />
-                  </button>
-                </div>
-
-                <div className="segmented">
-                  <button className="active">OpenAI</button>
-                  <button>Gemini</button>
-                  <button>Imagen</button>
-                </div>
-
-                <label className="select-row">
-                  <span>模型</span>
-                  <select>
-                    <option>Quality default</option>
-                    <option>Fast draft</option>
-                    <option>High detail</option>
-                  </select>
-                </label>
-
-                <label className="prompt-box">
-                  <span>当前 Prompt</span>
-                  <textarea
-                    value={
-                      "Pure white background Amazon main image, product-only composition, exact replacement filter kit, clean studio lighting, no props, no text, no watermark."
-                    }
-                    readOnly
-                  />
-                </label>
-
-                <div className="button-pair">
-                  <button className="dark-button stretch">
-                    <Play size={17} />
-                    生成
-                  </button>
-                  <button className="ghost-button square" aria-label="Regenerate">
-                    <RefreshCcw size={17} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="task-grid">
-              {mainImages.map((image) => (
-                <button className={image.index === "01" ? "task-card selected" : "task-card"} key={image.index}>
-                  <span className="task-index">{image.index}</span>
-                  <span className="task-copy">
-                    <strong>{image.title}</strong>
-                    <small>
-                      {image.type} · {image.tone}
-                    </small>
-                  </span>
-                  <span className={image.status === "Ready" ? "status ready" : "status"}>{image.status}</span>
-                </button>
-              ))}
-            </div>
-
-            <section className="aplus-band">
-              <div className="section-heading">
-                <div>
-                  <p className="eyebrow">A+ Content</p>
-                  <h3>PC / Mobile 模块</h3>
-                </div>
-                <button className="ghost-button">
-                  <ImagePlus size={17} />
-                  生成模块
-                </button>
-              </div>
-
-              <div className="module-list">
-                {modules.map((module, index) => (
-                  <button className="module-row" key={module.title}>
-                    <span className="module-number">{String(index + 1).padStart(2, "0")}</span>
-                    <span>
-                      <strong>{module.title}</strong>
-                      <small>{module.copy}</small>
-                    </span>
-                    <em>{module.size}</em>
-                  </button>
-                ))}
-              </div>
-            </section>
-          </section>
-
-          <aside className="right-panel">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">Versions</p>
-                <h3>生成版本</h3>
-              </div>
-              <Box size={18} />
-            </div>
-            <div className="version-list">
-              {versions.map((version) => (
-                <button className={version.includes("selected") ? "version active" : "version"} key={version}>
-                  <span>{version}</span>
-                  <small>1024 x 1024</small>
-                </button>
-              ))}
-            </div>
-
-            <div className="final-box">
-              <p className="eyebrow">Final Asset</p>
-              <h3>Image 01</h3>
-              <p>白底主图 · OpenAI · Quality default</p>
-              <button className="primary-action">设为最终版</button>
-            </div>
-          </aside>
+          </div>
         </div>
       </section>
+
+      <section className={c("section")} id="tools">
+        <div className={c("section-heading", "centered")}>
+          <p>为什么要做这个工具</p>
+          <h2>消除亚马逊 Listing 出图的三大瓶颈</h2>
+          <span>把原本分散在设计、运营、翻译和模型提示词里的工作，收进一个清晰的页面。</span>
+        </div>
+        <div className={c("pain-grid")}>
+          {painPoints.map((item) => {
+            const Icon = item.icon;
+            return (
+              <article className={c("pain-card")} key={item.title}>
+                <div className={c("pain-visual", item.imageClass)}>
+                  <div className={c("mini-browser")}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className={c("mini-product")} />
+                </div>
+                <div className={c("pain-icon")}>
+                  <Icon size={22} />
+                </div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <Link className={c("text-button")} href="/listing-copy">
+                  免费体验
+                  <ArrowRight size={16} />
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className={c("section", "process-section")} id="workflow">
+        <div className={c("section-heading", "centered")}>
+          <p>工作流程</p>
+          <h2>3 步创建主图和 A+ 内容草稿</h2>
+        </div>
+        <div className={c("step-grid")}>
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <article className={c("step-card")} key={step.title}>
+                <div className={c("step-count")}>{String(index + 1).padStart(2, "0")}</div>
+                <div className={c("step-shot")}>
+                  <Icon size={34} />
+                </div>
+                <p>{step.kicker}</p>
+                <h3>{step.title}</h3>
+                <span>{step.text}</span>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className={c("showcase")} id="examples">
+        <div className={c("showcase-copy")}>
+          <p className={c("section-label")}>生成结果预览</p>
+          <h2>从一张商品图延展成完整 Listing 视觉系统</h2>
+          <span>
+            页面视觉参考 Pic Copilot 的上传式工具入口，但内容针对 ListingDesk 的内部主图和 A+ 工作流重新组织。
+          </span>
+          <div className={c("feature-list")}>
+            <span>
+              <ImagePlus size={18} />
+              主图 7 张任务拆解
+            </span>
+            <span>
+              <Layers3 size={18} />
+              A+ PC / Mobile 双尺寸
+            </span>
+            <span>
+              <MessageSquareText size={18} />
+              Prompt 可编辑
+            </span>
+            <span>
+              <MousePointer2 size={18} />
+              版本选择与最终版标记
+            </span>
+          </div>
+        </div>
+        <div className={c("gallery-grid")}>
+          {gallery.map((item) => (
+            <article className={c("gallery-card", item.className)} key={item.title}>
+              <div className={c("gallery-product")} />
+              <strong>{item.title}</strong>
+              <span>{item.label}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className={c("section", "stats-section")}>
+        <div className={c("stats-copy")}>
+          <p className={c("section-label")}>ListingDesk AI</p>
+          <h2>为内部运营节省重复沟通和试错时间</h2>
+          <Link className={c("primary-button")} href="/listing-copy">
+            开始免费创建
+            <ArrowRight size={17} />
+          </Link>
+        </div>
+        <div className={c("stats-grid")}>
+          {stats.map((stat) => (
+            <div className={c("stat-card")} key={stat.label}>
+              <strong>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className={c("footer")}>
+        <div>
+          <a className={c("logo", "footer-logo")} href="#">
+            <span>
+              <Sparkles size={20} />
+            </span>
+            ListingDesk Studio
+          </a>
+          <p>让亚马逊 Listing 出图流程更简单、高效、可控。</p>
+        </div>
+        <div className={c("footer-links")}>
+          <a href="#tools">工具</a>
+          <a href="#workflow">流程</a>
+          <a href="#examples">示例</a>
+        </div>
+        <button className={c("footer-button")}>
+          <PenLine size={17} />
+          记录需求
+        </button>
+      </footer>
     </main>
   );
 }
 
-function Field({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="field">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  );
+function c(...names: string[]) {
+  return names.map((name) => styles[name] || name).join(" ");
 }
