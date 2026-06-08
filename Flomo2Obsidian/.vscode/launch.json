@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flomo2Obsidian 网页控制台",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "flomo_obsidian.web",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PLAYWRIGHT_BROWSERS_PATH": "${workspaceFolder}\\.ms-playwright"
+      },
+      "console": "integratedTerminal"
+    }
+  ]
+}

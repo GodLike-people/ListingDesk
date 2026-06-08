@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flomo-obsidian-sync"
+version = "0.1.0"
+description = "Sync flomo HTML/ZIP exports into an Obsidian vault."
+requires-python = ">=3.12"
+dependencies = [
+  "beautifulsoup4>=4.12.3",
+  "markdownify>=0.12.1",
+  "playwright>=1.43.0",
+  "PyYAML>=6.0.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.2.0"]
+
+[project.scripts]
+flomo-obsidian = "flomo_obsidian.cli:main"

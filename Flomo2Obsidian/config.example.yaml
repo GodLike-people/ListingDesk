@@ -1,0 +1,9 @@
+vault_path: D:\Your\Obsidian\Vault
+notes_root: Flomo
+attachment_root: Flomo/_attachments
+import_dir: imports
+download_dir: downloads
+browser_profile_dir: .browser-profile
+flomo_login_url: https://v.flomoapp.com/login
+flomo_export_url: https://v.flomoapp.com/mine?source=export
+export_timeout_seconds: 300
