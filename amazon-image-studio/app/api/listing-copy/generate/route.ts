@@ -55,7 +55,7 @@ const ALLOWED_MODELS = new Set([
 const riskWords = ["original", "genuine", "oem", "official", "factory", "best", "guaranteed"];
 const titleMaxLength = 200;
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export async function POST(request: Request) {
   try {
