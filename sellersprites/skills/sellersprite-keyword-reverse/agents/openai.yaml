@@ -1,0 +1,4 @@
+interface:
+  display_name: "SellerSprite 关键词反查下载"
+  short_description: "Export and clean SellerSprite ASIN keyword data"
+  default_prompt: "Use $sellersprite-keyword-reverse to query an Amazon ASIN in SellerSprite, export every keyword result, and save a cleaned Excel file."
